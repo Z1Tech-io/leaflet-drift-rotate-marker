@@ -15,7 +15,7 @@ type LeafletType = {
 };
 declare global {
   interface Window {
-    DriftMarker: any;
+    DriftRotationMarker: any;
     exports: Object;
     L: LeafletType;
   }
@@ -28,7 +28,7 @@ type slideOptions = {
   keepAtCenter?: boolean;
 };
 
-class DriftMarker extends Leaflet_module.Marker {
+class DriftRotationMarker extends Leaflet_module.Marker {
   private _slideToUntil = 0;
   private _slideToDuration = 1000;
   private _slideToLatLng: LatLngExpression = [0, 0];
@@ -116,6 +116,6 @@ class DriftMarker extends Leaflet_module.Marker {
   };
 }
 
-window.DriftMarker = DriftMarker;
+window.DriftRotationMarker = DriftRotationMarker;
 
-export default DriftMarker;
+export default DriftRotationMarker;
