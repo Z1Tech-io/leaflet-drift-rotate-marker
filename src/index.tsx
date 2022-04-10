@@ -3,7 +3,7 @@ if (typeof window.exports != "object") {
   window.exports = {};
 }
 
-import { Marker as LeafletMarker, LatLngExpression } from "leaflet";
+import { Marker as LeafletMarker, LatLngExpression, DomUtil } from "leaflet";
 
 // constructor type
 type ConstMarker = new (...args: any[]) => LeafletMarker;
@@ -36,6 +36,8 @@ class DriftRotationMarker extends Leaflet_module.Marker {
   private _slideKeepAtCenter = false;
   private _slideDraggingWasAllowed = false;
   private _slideFrame = 0;
+  private _rotationAngle = 0;
+  private _rotationOrigin =  'center';
 
   addInitHook = () => {
     this.on("move", this.slideCancel, this);
@@ -66,6 +68,7 @@ class DriftRotationMarker extends Leaflet_module.Marker {
 
     this.fire("movestart");
     this._slideTo();
+    this.applyRotation();
 
     return this;
   };
@@ -97,23 +100,53 @@ class DriftRotationMarker extends Leaflet_module.Marker {
     var startPoint = this._map.latLngToContainerPoint(this._slideFromLatLng);
     var endPoint = this._map.latLngToContainerPoint(this._slideToLatLng);
     var percentDone =
-      (this._slideToDuration - remaining) / this._slideToDuration;
+        (this._slideToDuration - remaining) / this._slideToDuration;
 
     var currPoint = endPoint
-      .multiplyBy(percentDone)
-      .add(startPoint.multiplyBy(1 - percentDone));
+        .multiplyBy(percentDone)
+        .add(startPoint.multiplyBy(1 - percentDone));
     var currLatLng = this._map.containerPointToLatLng(currPoint);
     this.setLatLng(currLatLng);
 
     if (this._slideKeepAtCenter) {
-      this._map.panTo(currLatLng, { animate: false });
+      this._map.panTo(currLatLng, {animate: false});
     }
 
     this._slideFrame = Leaflet_module.Util.requestAnimFrame(
-      this._slideTo,
-      this
+        this._slideTo,
+        this
     );
   };
+
+  private applyRotation = () => {
+    console.log("apply rotation");
+    if (this._rotationAngle) {
+      // this.options.icon.
+      // this.getIcon().options
+      // icon.style[DomUtil.TRANSFORM + 'Origin'] = this._rotationOrigin;
+      //
+      // if (oldIE) {
+
+      //   // for IE 9, use the 2D rotation
+      //   this._icon.style[DomUtil.TRANSFORM] = 'rotate(' + this._rotationAngle + 'deg)';
+      // } else {
+      //   // for modern browsers, prefer the 3D accelerated version
+      //   this._icon.style[DomUtil.TRANSFORM] += ' rotateZ(' + this._rotationAngle + 'deg)';
+      // }
+    }
+  }
+
+  setRotationAngle = (angle: number) => {
+    this._rotationAngle = angle;
+   // this.update();
+    return this;
+  }
+
+  setRotationOrigin = (origin: string) => {
+    this._rotationOrigin = origin;
+    //this.update();
+    return this;
+  }
 }
 
 window.DriftRotationMarker = DriftRotationMarker;
