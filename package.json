@@ -1,5 +1,5 @@
 {
-  "name": "leaflet-drift-marker",
+  "name": "leaflet-drift-rotate-marker",
   "version": "2.0.0",
   "private": false,
   "description": "Just a marker that can drift its way to a new position, to use with leaflet, and base on Typescript for react,vue...",
